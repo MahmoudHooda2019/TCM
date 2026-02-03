@@ -1,0 +1,35 @@
+### Python bytecode / cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+### Virtual environments
+.venv/
+venv/
+env/
+.env
+
+### Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+
+### Logs & databases
+*.log
+*.sqlite3
+
+### OS-specific
+.DS_Store
+Thumbs.db
+
+### IDE / editor
+.vscode/
+.idea/
+
+### Project-specific
+resume.txt
+
+# TCM session files
+TCM_session/
+TCM_session.session*
