@@ -13,6 +13,23 @@ import config
 from utils import log_pending, save_resume, load_resume_ids, init_resume
 
 
+# ── helpers ───────────────────────────────────────────────────────────────────
+
+def _msg_text(msg) -> str:
+    """
+    Safely get the human text from a Telegram message, whether it is:
+      - pure text
+      - media with caption
+    Different Telethon versions use .message / .raw_text / .text.
+    """
+    return (
+        getattr(msg, "message", None)
+        or getattr(msg, "raw_text", None)
+        or getattr(msg, "text", None)
+        or ""
+    )
+
+
 # ── invite hash ───────────────────────────────────────────────────────────────
 
 def extract_invite_hash(link: str) -> str:
@@ -234,16 +251,18 @@ async def transfer_messages(client: TelegramClient, old_channel: str, new_channe
         try:
             sent = False
 
-            # media (photo / document / video / audio)
+            text_content = _msg_text(msg)
+
+            # media (photo / document / video / audio) + caption (إن وُجد)
             if content_type in ("media", "all") and msg.media and isinstance(
                 msg.media, (MessageMediaPhoto, MessageMediaDocument)
             ):
-                await client.send_file(new, msg.media, caption=msg.text or "")
+                await client.send_file(new, msg.media, caption=text_content or "")
                 sent = True
 
-            # text
-            if content_type in ("text", "all") and msg.text and not sent:
-                await client.send_message(new, msg.text)
+            # text-only messages
+            if content_type in ("text", "all") and text_content and not sent:
+                await client.send_message(new, text_content)
                 sent = True
 
             # link / webpage embeds
@@ -251,7 +270,7 @@ async def transfer_messages(client: TelegramClient, old_channel: str, new_channe
                 webpage = getattr(msg.media, "webpage", None)
                 url     = getattr(webpage, "url", "") if webpage else ""
                 if url:
-                    caption = f"{msg.text}\n{url}" if msg.text else url
+                    caption = f"{text_content}\n{url}" if text_content else url
                     await client.send_message(new, f"[Link] {caption}")
 
             save_resume(msg.id, "SUCCESS")
