@@ -13,6 +13,9 @@ import config
 def _ask_api():
     """Return (api_id: int, api_hash: str).  Loops until both are valid."""
     print_section("Telegram API credentials")
+    print("  You can create/manage your Telegram API keys at:")
+    print("    https://my.telegram.org")
+    print()
     while True:
         try:
             api_id   = int(input("  API ID   : "))

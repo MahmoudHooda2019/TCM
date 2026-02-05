@@ -4,18 +4,22 @@ init(autoreset=True)
 
 def print_banner():
     art = r"""
- ______   ____     __  __
- \  _  \  / __ \   | \/ |
-  | | |  | |       | |  | |
-  | | |  | |____   | |  | |
-  |_| |   \___  /  |_|  |_|
+  _______    _____   __  __ 
+ |__   __|  / ____| |  \/  |
+    | |    | |      | \  / |
+    | |    | |      | |\/| |
+    | |    | |____  | |  | |
+    |_|     \_____| |_|  |_|
+                                                          
 """
-    subtitle  = "  Telegram Channel Migrator"
+    subtitle  = "  Telegram  Channel  Migrator"
     separator = "  ─" + "─" * len(subtitle)
 
     print()
+    print(Fore.CYAN + separator)
     print(Fore.CYAN + art, end="")
     print(Fore.CYAN + subtitle)
+    print(Fore.CYAN + art, end="")
     print(Fore.CYAN + separator)
     print(Style.RESET_ALL)
 
